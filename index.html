@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Invitation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Paper-burn filter: noise + radial bias decide WHICH parts of the envelope burn first. script.js animates the thresholds. -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+    <filter id="burn" x="-10%" y="-10%" width="120%" height="120%" color-interpolation-filters="sRGB">
+      <feTurbulence type="fractalNoise" baseFrequency="0.02 0.028" numOctaves="5" seed="11" result="nz"/>
+      <feColorMatrix in="nz" type="matrix" values="1 0 0 0 0  1 0 0 0 0  1 0 0 0 0  0 0 0 0 1" result="nzg"/>
+      <feImage id="burnImg" x="0" y="0" width="440" height="293" preserveAspectRatio="none" result="bias"
+        href="data:image/svg+xml;utf8,&lt;svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'&gt;&lt;defs&gt;&lt;radialGradient id='g' cx='.5' cy='.5' r='.71'&gt;&lt;stop offset='0' stop-color='white'/&gt;&lt;stop offset='1' stop-color='black'/&gt;&lt;/radialGradient&gt;&lt;/defs&gt;&lt;rect width='100' height='100' fill='url(%23g)'/&gt;&lt;/svg&gt;"/>
+      <feComposite in="bias" in2="nzg" operator="arithmetic" k1="0" k2="0.55" k3="0.45" k4="0" result="F"/>
+      <feComponentTransfer in="F" result="c1"><feFuncR id="f1" type="linear" slope="30" intercept="-36"/></feComponentTransfer>
+      <feColorMatrix in="c1" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  1 0 0 0 0" result="A1"/>
+      <feComponentTransfer in="F" result="c2"><feFuncR id="f2" type="linear" slope="30" intercept="-33.9"/></feComponentTransfer>
+      <feColorMatrix in="c2" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  1 0 0 0 0" result="A2"/>
+      <feComponentTransfer in="F" result="c3"><feFuncR id="f3" type="linear" slope="30" intercept="-35.25"/></feComponentTransfer>
+      <feColorMatrix in="c3" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  1 0 0 0 0" result="A3"/>
+      <feComposite in="SourceGraphic" in2="A1" operator="in" result="pic"/>
+      <feComposite in="A2" in2="A1" operator="out" result="r2a"/>
+      <feComposite in="r2a" in2="SourceAlpha" operator="in" result="r2"/>
+      <feFlood flood-color="#ff4a10" result="fo"/>
+      <feComposite in="fo" in2="r2" operator="in" result="orange"/>
+      <feGaussianBlur in="orange" stdDeviation="2.5" result="glowO"/>
+      <feComposite in="A3" in2="A1" operator="out" result="h3a"/>
+      <feComposite in="h3a" in2="SourceAlpha" operator="in" result="h3"/>
+      <feFlood flood-color="#ffd060" result="fy"/>
+      <feComposite in="fy" in2="h3" operator="in" result="hot"/>
+      <feMerge><feMergeNode in="glowO"/><feMergeNode in="pic"/><feMergeNode in="orange"/><feMergeNode in="hot"/></feMerge>
+    </filter>
+  </svg>
+
+  <!-- Fire + particles are drawn here -->
+  <canvas id="fire" aria-hidden="true"></canvas>
+  <div class="mouse-glow" aria-hidden="true"></div>
+
+  <main class="stage">
+    <!-- LOGO: set LOGO_SRC in script.js (e.g. "assets/logo.png"). Empty = placeholder. -->
+    <div class="logo" id="logo">
+      <img class="logo__img" id="logoImg" alt="Logo" hidden>
+      <span class="logo__placeholder" id="logoPlaceholder">[ LOGO PLACEHOLDER ]</span>
+    </div>
+
+    <article class="letter" id="letter">
+      <div class="letter__paper"></div>
+      <div class="letter__content">
+        <p class="letter__kicker">Invitation</p>
+        <div class="ornament" aria-hidden="true"><span></span><i></i><span></span></div>
+        <h1 data-field="title">[EVENT TITLE]</h1>
+        <p class="letter__desc" data-field="description">[DESCRIPTION]</p>
+        <div class="ornament ornament--thin" aria-hidden="true"><span></span><i></i><span></span></div>
+        <dl class="details" id="details"></dl>
+        <p class="letter__extra" data-field="extra">[ADDITIONAL INFORMATION]</p>
+      </div>
+    </article>
+  </main>
+
+  <!-- Envelope: click to open -->
+  <button class="envelope" id="envelope" type="button" aria-label="Open the envelope">
+    <span class="env-back"></span>
+    <span class="env-sheet"></span>
+    <span class="env-front"></span>
+    <span class="env-flap"></span>
+    <span class="env-seal"></span>
+  </button>
+  <p class="hint">Chạm vào phong bì để mở</p>
+
+  <div class="progress" aria-hidden="true"></div>
+  <p class="scroll-cue">Cuộn xuống</p>
+
+  <section class="sec">
+    <h2 class="reveal">Thời gian còn lại</h2>
+    <div class="cd">
+      <div class="cd-box reveal"><b id="cdD">--</b><span>Ngày</span></div>
+      <div class="cd-box reveal"><b id="cdH">--</b><span>Giờ</span></div>
+      <div class="cd-box reveal"><b id="cdM">--</b><span>Phút</span></div>
+      <div class="cd-box reveal"><b id="cdS">--</b><span>Giây</span></div>
+    </div>
+  </section>
+
+  <section class="sec">
+    <h2 class="reveal">Chương trình</h2>
+    <ol class="timeline" id="timeline"></ol>
+  </section>
+
+  <section class="sec">
+    <h2 class="reveal">Địa điểm</h2>
+    <div class="venue reveal">
+      <div><h3 id="venueName"></h3><p id="venueAddr"></p><a class="btn" id="rsvp" href="#"></a></div>
+      <div class="map">[ MAP PLACEHOLDER ]</div>
+    </div>
+  </section>
+
+  <footer class="foot"><p data-field="footer">[FOOTER NOTE]</p></footer>
+
+  <button class="replay" id="replay" type="button" aria-label="Replay the fire introduction">&#8635; Replay</button>
+
+  <script src="script.js"></script>
+</body>
+</html>
