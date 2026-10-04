@@ -340,8 +340,8 @@ body.is-letter .gong-bg { opacity: .2; }
 body.is-letter .cloud { opacity: .6; }
 @keyframes drift { from { transform: translateX(-40vw); } to { transform: translateX(125vw); } }
 /* một dải thổ cẩm dài chạy hết bề ngang trang đầu (tràn nhẹ 2 mép để không lộ đầu vải) */
-.fab { position: absolute; left: -2vw; top: 6%; width: 104vw; max-width: none; opacity: 0; transition: opacity 2.5s; filter: drop-shadow(0 10px 20px rgba(0,0,0,.45)); animation: flutter 7s ease-in-out infinite; }
-@media (max-width: 760px) { .fab { left: -45vw; width: 190vw; top: 10%; } }
+.fab { position: absolute; left: -3.3vw; top: 2vw; width: 125.8vw; max-width: none; opacity: 0; transition: opacity 2.5s; filter: drop-shadow(0 10px 20px rgba(0,0,0,.45)); animation: flutter 7s ease-in-out infinite; }
+@media (max-width: 760px) { .fab { left: -45vw; width: 230vw; top: 64vw; } }   /* điện thoại: logo nằm trên đầu thư nên đẩy vải xuống sau lá thư */
 body.is-letter .fab { opacity: .95; }
 @keyframes flutter { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(14px); } }
 
