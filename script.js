@@ -11,7 +11,7 @@ const invitationData = {
   dateISO: "2026-11-28T18:00:00",                // countdown target
   program: [                                    // timeline rows (add / remove freely)
     { time: "16h30", title: "Workshop trải nghiệm", text: "Workshop bên ngoài hội trường: trải nghiệm đàn đá và đàn T'rưng" },
-    { time: "18h30", title: "Chuẩn bị trong hội trường", text: "Các bộ phận vào vị trí, chuẩn bị chương trình tại Hội trường A.01.01" },
+    { time: "18h30", title: "Chương trình bắt đầu", text: "Khai mạc đêm Khúc Mộc Vân tại Hội trường A.01.01" },
     { time: "21h00", title: "Kết thúc chương trình", text: "Bế mạc đêm Khúc Mộc Vân" },
   ],
 
